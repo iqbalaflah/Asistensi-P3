@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_STUDENTS 100
+
+struct Student {
+    char name[100];
+    int id;
+    float grade;
+};
+
+void addStudent(struct Student students[], int *count) {
+    if (*count >= MAX_STUDENTS) return;
+    printf("Nama: "); getchar(); fgets(students[*count].name, 100, stdin);
+    students[*count].name[strcspn(students[*count].name, "\n")] = '\0';
+    printf("Nomor Induk: "); scanf("%d", &students[*count].id);
+    printf("Nilai: "); scanf("%f", &students[*count].grade);
+    (*count)++;
+}
+
+void displayStudents(struct Student students[], int count) {
+    for (int i = 0; i < count; i++) {
+        printf("%d. %s (ID: %d) - Nilai: %.2f\n", i + 1, students[i].name, students[i].id, students[i].grade);
+    }
+}
+
+void calculateAverage(struct Student students[], int count) {
+    float total = 0;
+    for (int i = 0; i < count; i++) total += students[i].grade;
+    printf("Rata-rata nilai: %.2f\n", total / count);
+}
+
+int main() {
+    struct Student students[MAX_STUDENTS];
+    int count = 0, choice;
+    do {
+        printf("\n1. Tambah Siswa\n2. Lihat Siswa\n3. Rata-rata Nilai\n4. Keluar\nPilih: ");
+        scanf("%d", &choice);
+        if (choice == 1) addStudent(students, &count);
+        else if (choice == 2) displayStudents(students, count);
+        else if (choice == 3) calculateAverage(students, count);
+    } while (choice != 4);
+    return 0;
+}
