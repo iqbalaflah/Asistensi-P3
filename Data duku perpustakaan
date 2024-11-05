@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_BOOKS 100
+
+struct Book {
+    char title[100];
+    char author[100];
+    int year;
+    int isAvailable; // 1 untuk tersedia, 0 untuk dipinjam
+};
+
+void addBook(struct Book books[], int *count) {
+    if (*count >= MAX_BOOKS) return;
+    printf("Judul: "); getchar(); fgets(books[*count].title, 100, stdin);
+    printf("Penulis: "); fgets(books[*count].author, 100, stdin);
+    printf("Tahun: "); scanf("%d", &books[*count].year);
+    books[*count].isAvailable = 1;
+    (*count)++;
+}
+
+void displayBooks(struct Book books[], int count) {
+    for (int i = 0; i < count; i++) {
+        printf("Buku %d - %s (%s, %d) [%s]\n", i + 1, books[i].title, books[i].author, books[i].year,
+               books[i].isAvailable ? "Tersedia" : "Dipinjam");
+    }
+}
+
+void changeStatus(struct Book books[], int count) {
+    int idx;
+    displayBooks(books, count);
+    printf("Pilih nomor buku: "); scanf("%d", &idx);
+    if (idx > 0 && idx <= count) books[idx - 1].isAvailable = !books[idx - 1].isAvailable;
+}
+
+int main() {
+    struct Book books[MAX_BOOKS];
+    int count = 0, choice;
+    do {
+        printf("\n1. Tambah Buku\n2. Lihat Buku\n3. Ubah Status\n4. Keluar\nPilih: ");
+        scanf("%d", &choice);
+        if (choice == 1) addBook(books, &count);
+        else if (choice == 2) displayBooks(books, count);
+        else if (choice == 3) changeStatus(books, count);
+    } while (choice != 4);
+    return 0;
+}
